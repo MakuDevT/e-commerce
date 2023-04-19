@@ -44,7 +44,7 @@ class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
       );
     } else {
       return AppBar(
-        title: Text('My Shops'.hardcoded),
+        title: Text('My Shop'.hardcoded),
         actions: [
           const ShoppingCartIcon(),
           if (user != null) ...[
