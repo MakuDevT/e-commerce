@@ -36,6 +36,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   void _onSignedIn() {
     setState(() => _subRoute = CheckoutSubRoute.payment);
+
     // perform a nice scroll animation to reveal the next page
     _controller.animateToPage(
       _subRoute.index,
