@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/src/common_widgets/async_value_widget.dart';
 import 'package:ecommerce_app/src/constants/test_products.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
@@ -14,6 +15,9 @@ import 'package:ecommerce_app/src/features/products/presentation/product_screen/
 import 'package:ecommerce_app/src/features/products/presentation/product_screen/product_average_rating.dart';
 import 'package:ecommerce_app/src/features/reviews/presentation/product_reviews/product_reviews_list.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../../common_widgets/error_message_widget.dart';
 
 /// Shows the product page for a given product ID.
 class ProductScreen extends StatelessWidget {
@@ -22,23 +26,31 @@ class ProductScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Read from data source
-    final product = FakeProductsRepository.instance.getProduct(productId);
     return Scaffold(
       appBar: const HomeAppBar(),
-      body: product == null
-          ? EmptyPlaceholderWidget(
-              message: 'Product not found'.hardcoded,
-            )
-          : CustomScrollView(
-              slivers: [
-                ResponsiveSliverCenter(
-                  padding: const EdgeInsets.all(Sizes.p16),
-                  child: ProductDetails(product: product),
-                ),
-                ProductReviewsList(productId: productId),
-              ],
-            ),
+      body: Consumer(
+        builder: ((context, ref, child) {
+          // final productsRepository = ref.watch(productsRepositoryProvider);
+          // final product = productsRepository.getProduct(productId);
+          final productValue = ref.watch(productStreamProvider(productId));
+          return AsyncValueWidget<Product?>(
+            value: productValue,
+            data: (product) => product == null
+                ? EmptyPlaceholderWidget(
+                    message: 'Product not found'.hardcoded,
+                  )
+                : CustomScrollView(
+                    slivers: [
+                      ResponsiveSliverCenter(
+                        padding: const EdgeInsets.all(Sizes.p16),
+                        child: ProductDetails(product: product),
+                      ),
+                      ProductReviewsList(productId: productId),
+                    ],
+                  ),
+          );
+        }),
+      ),
     );
   }
 }

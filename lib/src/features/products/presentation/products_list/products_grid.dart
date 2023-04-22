@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:ecommerce_app/src/common_widgets/error_message_widget.dart';
 import 'package:ecommerce_app/src/constants/test_products.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
 import 'package:ecommerce_app/src/features/products/presentation/product_screen/product_screen.dart';
@@ -9,37 +10,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:ecommerce_app/src/constants/app_sizes.dart';
 import 'package:ecommerce_app/src/features/products/presentation/products_list/product_card.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../common_widgets/async_value_widget.dart';
+import '../../domain/product.dart';
+
 /// A widget that displays the list of products that match the search query.
-class ProductsGrid extends StatelessWidget {
+class ProductsGrid extends ConsumerWidget {
   const ProductsGrid({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // TODO: Read from data source
-    final products = FakeProductsRepository.instance.getProductsList();
-    return products.isEmpty
-        ? Center(
-            child: Text(
-              'No products found'.hardcoded,
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          )
-        : ProductsLayoutGrid(
-            itemCount: products.length,
-            itemBuilder: (_, index) {
-              final product = products[index];
-              return ProductCard(
-                  product: product,
-                  //the reason we pass product id instead of the object because one of the goals of routing on the web
-                  //->  is to be able to navigate to a product page given a unique url that points to that page
-                  //->  its only and possible to do if we specify the product ID as part of the url then
-                  //->  GoRouter will then be able to parse this URL extract the product id and then use it to show the correct product page
-                  onPressed: () => context.goNamed(AppRoute.product.name,
-                      params: {'id': product.id}));
-            },
-          );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final productsListValue = ref.watch(productsListStreamProvider);
+    return AsyncValueWidget<List<Product>>(
+        value: productsListValue,
+        data: (products) => products.isEmpty
+            ? Center(
+                child: Text(
+                  'No products found'.hardcoded,
+                  style: Theme.of(context).textTheme.headline4,
+                ),
+              )
+            : ProductsLayoutGrid(
+                itemCount: products.length,
+                itemBuilder: (_, index) {
+                  final product = products[index];
+                  return ProductCard(
+                      product: product,
+                      //the reason we pass product id instead of the object because one of the goals of routing on the web
+                      //->  is to be able to navigate to a product page given a unique url that points to that page
+                      //->  its only and possible to do if we specify the product ID as part of the url then
+                      //->  GoRouter will then be able to parse this URL extract the product id and then use it to show the correct product page
+                      onPressed: () => context.goNamed(AppRoute.product.name,
+                          params: {'id': product.id}));
+                },
+              ));
   }
 }
 
