@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/src/constants/breakpoints.dart';
+import 'package:ecommerce_app/src/features/authentication/data/fake_auth_repository.dart';
 import 'package:ecommerce_app/src/features/authentication/presentation/account/account_screen.dart';
 import 'package:ecommerce_app/src/features/orders/presentation/orders_list/orders_list_screen.dart';
 import 'package:ecommerce_app/src/features/authentication/presentation/sign_in/email_password_sign_in_screen.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:ecommerce_app/src/common_widgets/action_text_button.dart';
 import 'package:ecommerce_app/src/features/products/presentation/home_app_bar/more_menu_button.dart';
 import 'package:ecommerce_app/src/features/products/presentation/home_app_bar/shopping_cart_icon.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../routing/app_router.dart';
@@ -19,13 +21,12 @@ import '../../../../routing/app_router.dart';
 /// - [ShoppingCartIcon]
 /// - Orders button
 /// - Account or Sign-in button
-class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
+class HomeAppBar extends ConsumerWidget with PreferredSizeWidget {
   const HomeAppBar({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // TODO: get user from auth repository
-    const user = AppUser(uid: '123', email: 'test@test.com');
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(authStateChangesProvider).value;
     // * This widget is responsive.
     // * On large screen sizes, it shows all the actions in the app bar.
     // * On small screen sizes, it shows only the shopping cart icon and a
@@ -37,7 +38,7 @@ class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
     if (screenWidth < Breakpoint.tablet) {
       return AppBar(
         title: Text('My Shop'.hardcoded),
-        actions: const [
+        actions: [
           ShoppingCartIcon(),
           MoreMenuButton(user: user),
         ],
