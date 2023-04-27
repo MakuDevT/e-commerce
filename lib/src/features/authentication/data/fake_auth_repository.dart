@@ -7,11 +7,14 @@ import '../domain/app_user.dart';
 class FakeAuthRepository {
   final _authState = InMemoryStore<AppUser?>(null);
 
+  //This method observers state changes
   Stream<AppUser?> authStateChanges() => _authState.stream;
-
+  //This is use to read the current state just once: null or not
   AppUser? get currentUser => _authState.value;
 
   Future<void> signInWithEmailAndPassword(String email, String password) async {
+    await Future.delayed(const Duration(seconds: 2));
+
     if (currentUser == null) {
       _createNewUser(email);
     }
@@ -19,6 +22,7 @@ class FakeAuthRepository {
 
   Future<void> createUserWithEmailAndPassword(
       String email, String password) async {
+    await Future.delayed(const Duration(seconds: 2));
     if (currentUser == null) {
       _createNewUser(email);
     }

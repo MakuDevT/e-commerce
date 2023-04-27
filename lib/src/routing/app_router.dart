@@ -27,6 +27,11 @@ final goRouter = GoRouter(
   //initialLocation tells GoRouter which location to use in first start
   initialLocation: '/',
   debugLogDiagnostics: false,
+  redirect: (context, state) {
+    const isLoggedIn = false; //TODO: read from authRepository
+    if (isLoggedIn) {}
+    return null;
+  },
   routes: [
     GoRoute(
       path: '/',
