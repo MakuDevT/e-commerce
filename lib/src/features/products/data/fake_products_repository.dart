@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:ecommerce_app/src/constants/test_products.dart';
 import 'package:flutter/foundation.dart';
@@ -17,7 +18,14 @@ class FakeProductsRepository {
   }
 
   Product? getProduct(String id) {
-    return _products.firstWhere((product) => product.id == id);
+    // try {
+    //   return _products.firstWhere(
+    //     (product) => product.id == id,
+    //   );
+    // } catch (e) {
+    //   return null;
+    // }
+    return _getProduct(_products, id);
   }
 
   Future<List<Product>> fetchProductsList() async {
@@ -33,14 +41,23 @@ class FakeProductsRepository {
   }
 
   Stream<Product?> watchProduct(String id) {
-    return watchProductsList()
-        .map((products) => products.firstWhere((product) => product.id == id));
+    return watchProductsList().map((products) => _getProduct(products, id));
   }
 
   Future<Product?> fetchProduct(String id) async {
     final product = await fetchProductsList();
     final matchingProduct = product.firstWhere((product) => product.id == id);
     return matchingProduct;
+  }
+
+  static Product? _getProduct(List<Product> products, String id) {
+    try {
+      return products.firstWhere(
+        (product) => product.id == id,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
