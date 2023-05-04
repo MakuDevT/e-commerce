@@ -21,6 +21,7 @@ dependencies:
   go_router: ^6.5.7
   flutter_riverpod: ^2.3.5
   rxdart: ^0.27.7
+  mocktail: ^0.3.0
 
 dev_dependencies:
   flutter_test:
