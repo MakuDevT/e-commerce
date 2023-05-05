@@ -20,15 +20,16 @@ class EmailPasswordSignInController
 
   Future<void> _authenticate(String email, String password) {
     switch (state.formType) {
-      case EmailPasswordSignInFormType.register:
-        return authRepository.createUserWithEmailAndPassword(email, password);
       case EmailPasswordSignInFormType.signIn:
         return authRepository.signInWithEmailAndPassword(email, password);
+      case EmailPasswordSignInFormType.register:
+        return authRepository.createUserWithEmailAndPassword(email, password);
     }
   }
 
   void updateFormType(EmailPasswordSignInFormType formType) {
-    state = state.copyWith(formType: formType, value: AsyncValue.data(null));
+    state =
+        state.copyWith(formType: formType, value: const AsyncValue.data(null));
   }
 }
 
