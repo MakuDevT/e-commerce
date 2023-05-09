@@ -4,7 +4,6 @@ import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 /// Generic function to show a platform-aware Material or Cupertino dialog
 Future<bool?> showAlertDialog({
@@ -17,6 +16,7 @@ Future<bool?> showAlertDialog({
   if (kIsWeb || !Platform.isIOS) {
     return showDialog(
       context: context,
+      barrierDismissible: cancelActionText != null,
       builder: (context) => AlertDialog(
         title: Text(title),
         content: content != null ? Text(content) : null,
@@ -24,11 +24,11 @@ Future<bool?> showAlertDialog({
           if (cancelActionText != null)
             TextButton(
               child: Text(cancelActionText),
-              onPressed: () => context.pop(false),
+              onPressed: () => Navigator.of(context).pop(false),
             ),
           TextButton(
             child: Text(defaultActionText),
-            onPressed: () => context.pop(true),
+            onPressed: () => Navigator.of(context).pop(true),
           ),
         ],
       ),
@@ -36,6 +36,7 @@ Future<bool?> showAlertDialog({
   }
   return showCupertinoDialog(
     context: context,
+    barrierDismissible: cancelActionText != null,
     builder: (context) => CupertinoAlertDialog(
       title: Text(title),
       content: content != null ? Text(content) : null,
@@ -43,11 +44,11 @@ Future<bool?> showAlertDialog({
         if (cancelActionText != null)
           CupertinoDialogAction(
             child: Text(cancelActionText),
-            onPressed: () => context.pop(false),
+            onPressed: () => Navigator.of(context).pop(false),
           ),
         CupertinoDialogAction(
           child: Text(defaultActionText),
-          onPressed: () => context.pop(true),
+          onPressed: () => Navigator.of(context).pop(true),
         ),
       ],
     ),
