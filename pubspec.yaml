@@ -2,7 +2,7 @@ name: ecommerce_app
 description: Flutter eCommerce app (part of the Complete Flutter Course Bundle)
 
 # Prevent accidental publishing to pub.dev.
-publish_to: 'none'
+publish_to: "none"
 
 version: 1.0.0+1
 
@@ -38,12 +38,17 @@ flutter_icons:
   # https://github.com/fluttercommunity/flutter_launcher_icons/issues/144
   adaptive_icon_background: "assets/app-icon-background.png"
   adaptive_icon_foreground: "assets/app-icon-foreground.png"
-  
+
 flutter:
   uses-material-design: true
 
   # Enable generation of localized Strings from arb files.
   generate: true
+
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Regular.ttf
 
   assets:
     # Add all product images
