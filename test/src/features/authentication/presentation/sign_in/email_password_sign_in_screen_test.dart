@@ -9,10 +9,9 @@ void main() {
   const testEmail = 'test@test.com';
   const testPassword = '1234';
   late MockAuthRepository authRepository;
-  setUp() {
+  setUp(() {
     authRepository = MockAuthRepository();
-  }
-
+  });
   group('signIn', () {
     testWidgets('''
         Given formType is signIn
