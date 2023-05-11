@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:ecommerce_app/src/constants/test_products.dart';
 import 'package:ecommerce_app/src/utils/delay.dart';

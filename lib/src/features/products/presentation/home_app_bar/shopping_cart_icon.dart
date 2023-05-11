@@ -1,4 +1,3 @@
-import 'package:ecommerce_app/src/features/cart/presentation/shopping_cart/shopping_cart_screen.dart';
 import 'package:ecommerce_app/src/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/src/constants/app_sizes.dart';
@@ -60,7 +59,7 @@ class ShoppingCartIconBadge extends StatelessWidget {
           textScaleFactor: 1.0,
           style: Theme.of(context)
               .textTheme
-              .caption!
+              .bodySmall!
               .copyWith(color: Colors.white),
         ),
       ),

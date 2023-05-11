@@ -1,7 +1,4 @@
 import 'package:ecommerce_app/src/features/authentication/domain/app_user.dart';
-import 'package:ecommerce_app/src/features/authentication/presentation/account/account_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -19,15 +16,17 @@ void main() {
     r.expectLogoutDialogNotFound();
   });
 
-  testWidgets('Confirm logout success', (tester) async {
+  testWidgets('Confirm logout, success', (tester) async {
     final r = AuthRobot(tester);
     await r.pumpAccountScreen();
-    await r.tapLogoutButton();
-    r.expectLogoutDialogFound();
-    await r.tapDialogLogoutButton();
+    await tester.runAsync(() async {
+      await r.tapLogoutButton();
+      r.expectLogoutDialogFound();
+      await r.tapDialogLogoutButton();
+    });
+    r.expectLogoutDialogNotFound();
     r.expectErrorNotAlertFound();
   });
-
   testWidgets('Confirm logout failure', (tester) async {
     final r = AuthRobot(tester);
     final authRepository = MockAuthRepository();

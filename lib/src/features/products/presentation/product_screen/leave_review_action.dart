@@ -1,4 +1,3 @@
-import 'package:ecommerce_app/src/features/reviews/presentation/leave_review_screen/leave_review_screen.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:ecommerce_app/src/features/orders/domain/purchase.dart';
 import 'package:ecommerce_app/src/routing/app_router.dart';
@@ -39,7 +38,7 @@ class LeaveReviewAction extends StatelessWidget {
                 text: 'Leave a review'.hardcoded,
                 style: Theme.of(context)
                     .textTheme
-                    .bodyText1!
+                    .bodyLarge!
                     .copyWith(color: Colors.green[700]),
                 onPressed: () => context.pushNamed(AppRoute.leaveReview.name,
                     params: {'id': productId})),

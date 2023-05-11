@@ -1,7 +1,3 @@
-import 'package:ecommerce_app/src/features/authentication/presentation/account/account_screen.dart';
-import 'package:ecommerce_app/src/features/orders/presentation/orders_list/orders_list_screen.dart';
-import 'package:ecommerce_app/src/features/authentication/presentation/sign_in/email_password_sign_in_screen.dart';
-import 'package:ecommerce_app/src/features/authentication/presentation/sign_in/email_password_sign_in_state.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:ecommerce_app/src/routing/app_router.dart';
 import 'package:flutter/material.dart';
