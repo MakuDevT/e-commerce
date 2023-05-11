@@ -40,7 +40,7 @@ class ProductsGrid extends ConsumerWidget {
                       //->  its only and possible to do if we specify the product ID as part of the url then
                       //->  GoRouter will then be able to parse this URL extract the product id and then use it to show the correct product page
                       onPressed: () => context.goNamed(AppRoute.product.name,
-                          params: {'id': product.id}));
+                          pathParameters: {'id': product.id}));
                 },
               ));
   }
