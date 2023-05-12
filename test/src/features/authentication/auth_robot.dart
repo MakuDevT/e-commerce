@@ -10,9 +10,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class AuthRobot {
-  final WidgetTester tester;
-
   AuthRobot(this.tester);
+  final WidgetTester tester;
 
   Future<void> openEmailPasswordSignInScreen() async {
     final finder = find.byKey(MoreMenuButton.signInKey);
@@ -21,12 +20,16 @@ class AuthRobot {
     await tester.pumpAndSettle();
   }
 
-  Future<void> pumpEmailPasswordSignInContents(
-      {required FakeAuthRepository authRepository,
-      required EmailPasswordSignInFormType formType,
-      VoidCallback? onSignedIn}) {
-    return tester.pumpWidget(ProviderScope(
-        overrides: [authRepositoryProvider.overrideWithValue(authRepository)],
+  Future<void> pumpEmailPasswordSignInContents({
+    required FakeAuthRepository authRepository,
+    required EmailPasswordSignInFormType formType,
+    VoidCallback? onSignedIn,
+  }) {
+    return tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          authRepositoryProvider.overrideWithValue(authRepository),
+        ],
         child: MaterialApp(
           home: Scaffold(
             body: EmailPasswordSignInContents(
@@ -34,7 +37,9 @@ class AuthRobot {
               onSignedIn: onSignedIn,
             ),
           ),
-        )));
+        ),
+      ),
+    );
   }
 
   Future<void> tapEmailAndPasswordSubmitButton() async {
@@ -70,15 +75,19 @@ class AuthRobot {
   }
 
   Future<void> pumpAccountScreen({FakeAuthRepository? authRepository}) async {
-    await tester.pumpWidget(ProviderScope(
-      overrides: [
-        if (authRepository != null)
-          authRepositoryProvider.overrideWithValue(authRepository)
-      ],
-      child: const MaterialApp(
-        home: AccountScreen(),
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          if (authRepository != null)
+            authRepositoryProvider.overrideWithValue(
+              authRepository,
+            )
+        ],
+        child: const MaterialApp(
+          home: AccountScreen(),
+        ),
       ),
-    ));
+    );
   }
 
   Future<void> tapLogoutButton() async {
