@@ -7,13 +7,17 @@ import 'package:ecommerce_app/src/features/products/presentation/products_list/p
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../goldens/golden_robot.dart';
 import 'authentication/auth_robot.dart';
 
 class Robot {
-  Robot(this.tester) : auth = AuthRobot(tester);
+  Robot(this.tester)
+      : auth = AuthRobot(tester),
+        golden = GoldenRobot(tester);
 
   final WidgetTester tester;
   final AuthRobot auth;
+  final GoldenRobot golden;
 
   Future<void> pumpMyApp() async {
     final productRepository = FakeProductsRepository(addDelay: false);
