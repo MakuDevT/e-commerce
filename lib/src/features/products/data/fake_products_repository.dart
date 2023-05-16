@@ -103,3 +103,9 @@ final productFutureProvider =
   final productRepository = ref.watch(productsRepositoryProvider);
   return productRepository.fetchProduct(id);
 });
+
+final productProvider =
+    StreamProvider.autoDispose.family<Product?, String>((ref, id) {
+  final productsRepository = ref.watch(productsRepositoryProvider);
+  return productsRepository.watchProduct(id);
+});

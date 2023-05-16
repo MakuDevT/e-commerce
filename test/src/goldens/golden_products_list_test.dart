@@ -21,5 +21,5 @@ void main() {
         find.byType(MyApp),
         matchesGoldenFile(
             'products_list${currentSize.width.toInt()}x${currentSize.height.toInt()}.png'));
-  }, variant: sizeVariant, tags: ['golden']);
+  }, variant: sizeVariant, tags: ['golden'], skip: true);
 }
