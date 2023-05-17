@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/src/features/cart/data/local/sembast_cart_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ecommerce_app/src/features/cart/domain/cart.dart';
 
@@ -11,6 +12,5 @@ abstract class LocalCartRepository {
 }
 
 final localCartRepositoryProvider = Provider<LocalCartRepository>((ref) {
-  // * Override this in the main method
   throw UnimplementedError();
 });
