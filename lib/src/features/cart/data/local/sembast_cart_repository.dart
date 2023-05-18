@@ -38,7 +38,7 @@ class SembastCartRepository implements LocalCartRepository {
 
   @override
   Future<void> setCart(Cart cart) {
-    // TODO: implement setCart
+    return store.record(cartItemsKey).put(db, cart.toJson());
     throw UnimplementedError();
   }
 
