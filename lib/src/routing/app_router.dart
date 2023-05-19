@@ -34,8 +34,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     debugLogDiagnostics: false,
     redirect: (context, state) {
       final isLoggedIn = authRepository.currentUser != null;
-      print(">>>>>>>>>>>$isLoggedIn");
-      print("?????${state.location}");
       if (isLoggedIn) {
         if (state.location == '/signIn') {
           return '/';
