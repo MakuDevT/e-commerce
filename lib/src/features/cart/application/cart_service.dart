@@ -3,6 +3,7 @@ import 'package:ecommerce_app/src/features/cart/data/local/local_cart_repository
 import 'package:ecommerce_app/src/features/cart/data/remote/remote_cart_repository.dart';
 import 'package:ecommerce_app/src/features/cart/domain/item.dart';
 import 'package:ecommerce_app/src/features/cart/domain/mutable_cart.dart';
+import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../domain/cart.dart';
@@ -49,7 +50,7 @@ class CartService {
   }
 
   // remove an item from  the local or remote cart depending on the user auth
-  Future<void> removeItemById(ProductID, productId) async {
+  Future<void> removeItemById(ProductID productId) async {
     final cart = await _fetchCart();
     final updated = cart.removeItemById(productId);
     await _setCart(updated);
