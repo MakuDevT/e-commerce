@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:ecommerce_app/src/features/authentication/data/fake_auth_repository.dart';
 import 'package:ecommerce_app/src/features/cart/data/local/local_cart_repository.dart';
 import 'package:ecommerce_app/src/features/cart/data/remote/remote_cart_repository.dart';
 import 'package:ecommerce_app/src/features/cart/domain/item.dart';
 import 'package:ecommerce_app/src/features/cart/domain/mutable_cart.dart';
+import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -67,5 +70,41 @@ final cartProvider = StreamProvider<Cart>((ref) {
     return ref.watch(remoteCartRepositoryProvider).watchCart(user.uid);
   } else {
     return ref.watch(localCartRepositoryProvider).watchCart();
+  }
+});
+
+final cartItemsCountProvider = Provider<int>((ref) {
+  return ref.watch(cartProvider).maybeMap(
+        data: (cart) => cart.value.items.length,
+        orElse: () => 0,
+      );
+});
+
+final cartTotalProvider = Provider.autoDispose<double>((ref) {
+  final cart = ref.watch(cartProvider).value ?? const Cart();
+  final productList = ref.watch(productsListStreamProvider).value ?? [];
+  if (cart.items.isNotEmpty && productList.isNotEmpty) {
+    var total = 0.0;
+    for (final item in cart.items.entries) {
+      final product =
+          productList.firstWhere((product) => product.id == item.key);
+      total += product.price * item.value;
+    }
+    return total;
+  } else {
+    return 0.0;
+  }
+});
+
+final itemAvailableQuantityProvider =
+    Provider.autoDispose.family<int, Product>((ref, product) {
+  final cart = ref.watch(cartProvider).value;
+  if (cart != null) {
+    //get the current quantity for the given product in the cart
+    final quantity = cart.items[product.id] ?? 0;
+    //subtract it from the product available quantity
+    return max(0, product.availableQuantity - quantity);
+  } else {
+    return product.availableQuantity;
   }
 });
