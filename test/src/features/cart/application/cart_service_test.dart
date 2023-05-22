@@ -136,7 +136,7 @@ void main() {
       );
       final cartService = makeCartService();
       // run
-      await cartService.removeItemById(testUser, '123');
+      await cartService.removeItemById('123');
       // verify
       verify(
         () => localCartRepository.setCart(expectedCart),
@@ -160,7 +160,7 @@ void main() {
       );
       final cartService = makeCartService();
       // run
-      await cartService.removeItemById(testUser, '123');
+      await cartService.removeItemById('123');
       // verify
       verifyNever(
         () => localCartRepository.setCart(any()),
