@@ -3,44 +3,61 @@ import 'package:ecommerce_app/src/features/products/data/fake_products_repositor
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  FakeProductsRepository makeProductsRepository() =>
-      FakeProductsRepository(addDelay: false);
+  FakeProductsRepository makeProductsRepository() => FakeProductsRepository(
+        addDelay: false,
+      );
   group('FakeProductsRepository', () {
     test('getProductsList returns global list', () {
       final productsRepository = makeProductsRepository();
-      expect(productsRepository.getProductsList(), kTestProducts);
+      expect(
+        productsRepository.getProductsList(),
+        kTestProducts,
+      );
     });
 
-    test('getProduct(1) return first item ', () {
+    test('getProduct(1) returns first item', () {
       final productsRepository = makeProductsRepository();
-      expect(productsRepository.getProduct('1'), kTestProducts[0]);
+      expect(
+        productsRepository.getProduct('1'),
+        kTestProducts[0],
+      );
     });
 
     test('getProduct(100) returns null', () {
       final productsRepository = makeProductsRepository();
-      expect(productsRepository.getProduct('100'), null);
+      expect(
+        productsRepository.getProduct('100'),
+        null,
+      );
     });
   });
 
-  test('fetchProductList return global list', () async {
+  test('fetchProductsList returns global list', () async {
     final productsRepository = makeProductsRepository();
-    expect(await productsRepository.fetchProductsList(), kTestProducts);
+    expect(
+      await productsRepository.fetchProductsList(),
+      kTestProducts,
+    );
   });
-
-  test('watchProductList emits global list', () {
+  test('watchProductsList emits global list', () {
     final productsRepository = makeProductsRepository();
-    expect(productsRepository.watchProductsList(), emits(kTestProducts));
+    expect(
+      productsRepository.watchProductsList(),
+      emits(kTestProducts),
+    );
   });
   test('watchProduct(1) emits first item', () {
     final productsRepository = makeProductsRepository();
-    expect(productsRepository.watchProduct('1'), emits(kTestProducts[0]));
-  });
-  test('fetchProduct(1) emits first item', () async {
-    final productsRepository = makeProductsRepository();
-    expect(await productsRepository.fetchProduct('1'), kTestProducts[0]);
+    expect(
+      productsRepository.watchProduct('1'),
+      emits(kTestProducts[0]),
+    );
   });
   test('watchProduct(100) emits null', () {
     final productsRepository = makeProductsRepository();
-    expect(productsRepository.watchProduct('100'), emits(null));
+    expect(
+      productsRepository.watchProduct('100'),
+      emits(null),
+    );
   });
 }
