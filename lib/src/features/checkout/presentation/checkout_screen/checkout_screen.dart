@@ -1,32 +1,40 @@
+import 'package:ecommerce_app/src/features/authentication/data/fake_auth_repository.dart';
+import 'package:ecommerce_app/src/features/authentication/presentation/sign_in/email_password_sign_in_screen.dart';
 import 'package:ecommerce_app/src/features/authentication/presentation/sign_in/email_password_sign_in_state.dart';
+import 'package:ecommerce_app/src/features/checkout/presentation/payment/payment_page.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:flutter/material.dart';
-import 'package:ecommerce_app/src/features/checkout/presentation/payment/payment_page.dart';
-import 'package:ecommerce_app/src/features/authentication/presentation/sign_in/email_password_sign_in_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// The two sub-routes that are presented as part of the checkout flow.
-/// TODO: add the address page as well (see [AddressScreen]).
 enum CheckoutSubRoute { register, payment }
 
 /// This is the root widget of the checkout flow, which is composed of 2 pages:
 /// 1. Register page
 /// 2. Payment page
-/// The correct page is displayed (and updated) based on whether the user is
-/// signed in.
-/// The logic for the entire flow is implemented in the
-/// [CheckoutScreenController], while UI updates are handled by a
-/// [PageController].
-class CheckoutScreen extends StatefulWidget {
+/// TODO: Show the correct page based on whether the user is signed in.
+class CheckoutScreen extends ConsumerStatefulWidget {
   const CheckoutScreen({super.key});
 
   @override
-  State<CheckoutScreen> createState() => _CheckoutScreenState();
+  ConsumerState<CheckoutScreen> createState() => _CheckoutScreenState();
 }
 
-class _CheckoutScreenState extends State<CheckoutScreen> {
-  final _controller = PageController();
+class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
+  late final PageController _controller;
 
   var _subRoute = CheckoutSubRoute.register;
+  // TODO: Load the correct initial page when this screen is presented
+
+  @override
+  void initState() {
+    super.initState();
+    final user = ref.read(authRepositoryProvider).currentUser;
+    if (user != null) {
+      setState(() => _subRoute = CheckoutSubRoute.payment);
+    }
+    _controller = PageController(initialPage: _subRoute.index);
+  }
 
   @override
   void dispose() {
@@ -36,7 +44,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   void _onSignedIn() {
     setState(() => _subRoute = CheckoutSubRoute.payment);
-
     // perform a nice scroll animation to reveal the next page
     _controller.animateToPage(
       _subRoute.index,

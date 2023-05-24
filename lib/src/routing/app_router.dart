@@ -1,6 +1,6 @@
 import 'package:ecommerce_app/src/features/authentication/data/fake_auth_repository.dart';
 import 'package:ecommerce_app/src/features/authentication/presentation/account/account_screen.dart';
-import 'package:ecommerce_app/src/features/checkout/presentation/checkout/checkout_screen.dart';
+
 import 'package:ecommerce_app/src/features/reviews/presentation/leave_review_screen/leave_review_screen.dart';
 import 'package:ecommerce_app/src/routing/go_router_refresh_stream.dart';
 import 'package:ecommerce_app/src/routing/not_found_screen.dart';
@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../features/checkout/presentation/checkout_screen/checkout_screen.dart';
 import '../features/products/presentation/products_list/products_list_screen.dart';
 
 enum AppRoute {
