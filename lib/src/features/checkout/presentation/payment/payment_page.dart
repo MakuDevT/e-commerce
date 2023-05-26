@@ -6,7 +6,9 @@ import 'package:ecommerce_app/src/features/checkout/presentation/payment/payment
 import 'package:ecommerce_app/src/features/cart/domain/item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../routing/app_router.dart';
 import '../../../cart/domain/cart.dart';
 
 /// Payment screen showing the items in the cart (with read-only quantities) and
@@ -16,7 +18,14 @@ class PaymentPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO: Listen to cart changes on checkout and update the UI.
+    ref.listen<double>(cartTotalProvider, (_, cartTotal) {
+      //If the cart total becomes 0, it means that the order has been fulfilled
+      //because all the items have been removed from the cart.
+      //so we should go the orders page.
+      if (cartTotal == 0.0) {
+        context.goNamed(AppRoute.orders.name);
+      }
+    });
     final cartValue = ref.watch(cartProvider);
     return AsyncValueWidget<Cart>(
         value: cartValue,

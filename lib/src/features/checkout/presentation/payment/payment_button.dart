@@ -1,25 +1,28 @@
 import 'package:ecommerce_app/src/common_widgets/alert_dialogs.dart';
+import 'package:ecommerce_app/src/features/checkout/presentation/payment/payment_button_controller.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
+import 'package:ecommerce_app/src/utils/async_value_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/src/common_widgets/primary_button.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Button used to initiate the payment flow.
-class PaymentButton extends StatelessWidget {
+class PaymentButton extends ConsumerWidget {
   const PaymentButton({super.key});
 
-  Future<void> _pay(BuildContext context) async {
-    // TODO: Implement
-    showNotImplementedAlertDialog(context: context);
-  }
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // TODO: error handling
-    // TODO: loading state
+    ref.listen<AsyncValue>(
+        paymentButtonControllerProvider,
+        (previousState, currentState) =>
+            currentState.showAlertDialogOnError(context));
+    final state = ref.watch(paymentButtonControllerProvider);
     return PrimaryButton(
-      text: 'Pay'.hardcoded,
-      isLoading: false,
-      onPressed: () => _pay(context),
-    );
+        text: 'Pay'.hardcoded,
+        isLoading: state.isLoading,
+        onPressed: state.isLoading
+            ? null
+            : () => ref.read(paymentButtonControllerProvider.notifier).pay());
   }
 }

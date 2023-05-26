@@ -16,14 +16,14 @@ class AccountScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<AsyncValue>(
-      accountScreenControllerPRovider,
+      accountScreenControllerProvider,
       (_, state) => state.showAlertDialogOnError(context),
     );
-    final state = ref.watch(accountScreenControllerPRovider);
+    final state = ref.watch(accountScreenControllerProvider);
     return Scaffold(
       appBar: AppBar(
         title: state.isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? const CircularProgressIndicator()
             : Text('Account'.hardcoded),
         actions: [
           ActionTextButton(
@@ -31,8 +31,6 @@ class AccountScreen extends ConsumerWidget {
             onPressed: state.isLoading
                 ? null
                 : () async {
-                    // showNotImplementedAlertDialog(context: context);
-
                     final logout = await showAlertDialog(
                       context: context,
                       title: 'Are you sure?'.hardcoded,
@@ -41,7 +39,7 @@ class AccountScreen extends ConsumerWidget {
                     );
                     if (logout == true) {
                       ref
-                          .read(accountScreenControllerPRovider.notifier)
+                          .read(accountScreenControllerProvider.notifier)
                           .signOut();
                     }
                   },
