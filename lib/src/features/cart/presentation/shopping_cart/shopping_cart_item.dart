@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:ecommerce_app/src/common_widgets/alert_dialogs.dart';
 import 'package:ecommerce_app/src/common_widgets/async_value_widget.dart';
 import 'package:ecommerce_app/src/features/cart/presentation/shopping_cart/shopping_cart_screen_controller.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
@@ -84,9 +83,9 @@ class ShoppingCartItemContents extends ConsumerWidget {
       endContent: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(product.title, style: Theme.of(context).textTheme.headline5),
+          Text(product.title, style: Theme.of(context).textTheme.headlineSmall),
           gapH24,
-          Text(priceFormatted, style: Theme.of(context).textTheme.headline5),
+          Text(priceFormatted, style: Theme.of(context).textTheme.headlineSmall),
           gapH24,
           isEditable
               // show the quantity selector and a delete button
@@ -140,13 +139,14 @@ class EditOrRemoveItemWidget extends ConsumerWidget {
                   .updateItemQuantity(item.productId, quantity),
         ),
         IconButton(
-            key: deleteKey(itemIndex),
-            icon: Icon(Icons.delete, color: Colors.red[700]),
-            onPressed: state.isLoading
-                ? null
-                : () => ref
-                    .read(shoppingCartScreenControllerProvider.notifier)
-                    .removeItemById(item.productId)),
+          key: deleteKey(itemIndex),
+          icon: Icon(Icons.delete, color: Colors.red[700]),
+          onPressed: state.isLoading
+              ? null
+              : () => ref
+                  .read(shoppingCartScreenControllerProvider.notifier)
+                  .removeItemById(item.productId),
+        ),
         const Spacer(),
       ],
     );

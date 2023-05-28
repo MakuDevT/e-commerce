@@ -1,4 +1,6 @@
-import 'package:ecommerce_app/src/features/orders/domain/purchase.dart';
+import 'package:ecommerce_app/src/features/orders/application/user_orders_provider.dart';
+import 'package:ecommerce_app/src/features/products/domain/product.dart';
+import 'package:ecommerce_app/src/features/reviews/application/reviews_service.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:ecommerce_app/src/routing/app_router.dart';
 import 'package:ecommerce_app/src/utils/date_formatter.dart';
@@ -13,15 +15,14 @@ import 'package:go_router/go_router.dart';
 /// leave a review.
 class LeaveReviewAction extends ConsumerWidget {
   const LeaveReviewAction({super.key, required this.productId});
-  final String productId;
+  final ProductID productId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO: Read from data source
-    final purchase = Purchase(orderId: 'abc', orderDate: DateTime.now());
-    if (purchase != null) {
+    final orders = ref.watch(matchingUserOrdersProvider(productId)).value;
+    if (orders != null && orders.isNotEmpty) {
       final dateFormatted =
-          ref.watch(dateFormatterProvider).format(purchase.orderDate);
+          ref.watch(dateFormatterProvider).format(orders.first.orderDate);
       return Column(
         children: [
           const Divider(),
@@ -35,23 +36,33 @@ class LeaveReviewAction extends ConsumerWidget {
             rowCrossAxisAlignment: CrossAxisAlignment.center,
             columnCrossAxisAlignment: CrossAxisAlignment.center,
             startContent: Text('Purchased on $dateFormatted'.hardcoded),
-            endContent: CustomTextButton(
-              text: 'Leave a review'.hardcoded,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText1!
-                  .copyWith(color: Colors.green[700]),
-              onPressed: () => context.goNamed(
-                AppRoute.leaveReview.name,
-                pathParameters: {'id': productId},
-              ),
+            endContent: Consumer(
+              builder: (context, ref, child) {
+                final reviewValue =
+                    ref.watch(userReviewStreamProvider(productId));
+
+                return CustomTextButton(
+                  text: (reviewValue.value != null
+                          ? 'Update review'
+                          : 'Leave a review')
+                      .hardcoded,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(color: Colors.green[700]),
+                  onPressed: () => context.goNamed(
+                    AppRoute.leaveReview.name,
+                    pathParameters: {'id': productId},
+                  ),
+                );
+              },
             ),
           ),
           gapH8,
         ],
       );
     } else {
-      return const SizedBox();
+      return const SizedBox.shrink();
     }
   }
 }

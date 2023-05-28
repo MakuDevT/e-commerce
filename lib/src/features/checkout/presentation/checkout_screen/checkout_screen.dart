@@ -12,7 +12,6 @@ enum CheckoutSubRoute { register, payment }
 /// This is the root widget of the checkout flow, which is composed of 2 pages:
 /// 1. Register page
 /// 2. Payment page
-/// TODO: Show the correct page based on whether the user is signed in.
 class CheckoutScreen extends ConsumerStatefulWidget {
   const CheckoutScreen({super.key});
 
@@ -24,7 +23,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   late final PageController _controller;
 
   var _subRoute = CheckoutSubRoute.register;
-  // TODO: Load the correct initial page when this screen is presented
 
   @override
   void initState() {

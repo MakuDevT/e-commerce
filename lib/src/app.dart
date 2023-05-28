@@ -9,11 +9,10 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final goRouter = ref.watch(goRouterProvider);
-    //.router is Navigator 2.0
     return MaterialApp.router(
+      routerConfig: goRouter,
       debugShowCheckedModeBanner: false,
       restorationScopeId: 'app',
-      routerConfig: goRouter,
       onGenerateTitle: (BuildContext context) => 'My Shop'.hardcoded,
       theme: ThemeData(
         primarySwatch: Colors.grey,

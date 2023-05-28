@@ -1,4 +1,3 @@
-import 'package:ecommerce_app/src/common_widgets/alert_dialogs.dart';
 import 'package:ecommerce_app/src/features/checkout/presentation/payment/payment_button_controller.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:ecommerce_app/src/utils/async_value_ui.dart';
@@ -12,17 +11,17 @@ class PaymentButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO: error handling
     ref.listen<AsyncValue>(
-        paymentButtonControllerProvider,
-        (previousState, currentState) =>
-            currentState.showAlertDialogOnError(context));
+      paymentButtonControllerProvider,
+      (_, state) => state.showAlertDialogOnError(context),
+    );
     final state = ref.watch(paymentButtonControllerProvider);
     return PrimaryButton(
-        text: 'Pay'.hardcoded,
-        isLoading: state.isLoading,
-        onPressed: state.isLoading
-            ? null
-            : () => ref.read(paymentButtonControllerProvider.notifier).pay());
+      text: 'Pay'.hardcoded,
+      isLoading: state.isLoading,
+      onPressed: state.isLoading
+          ? null
+          : () => ref.read(paymentButtonControllerProvider.notifier).pay(),
+    );
   }
 }

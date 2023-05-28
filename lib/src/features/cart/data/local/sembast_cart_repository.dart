@@ -7,10 +7,10 @@ import 'package:sembast/sembast_io.dart';
 import 'package:sembast_web/sembast_web.dart';
 
 class SembastCartRepository implements LocalCartRepository {
+  SembastCartRepository(this.db);
   final Database db;
   final store = StoreRef.main();
 
-  SembastCartRepository(this.db);
   static Future<Database> createDatabase(String filename) async {
     if (!kIsWeb) {
       final appDocDir = await getApplicationDocumentsDirectory();
@@ -20,12 +20,12 @@ class SembastCartRepository implements LocalCartRepository {
     }
   }
 
-  //simple helper method that we can use to create a default database
   static Future<SembastCartRepository> makeDefault() async {
     return SembastCartRepository(await createDatabase('default.db'));
   }
 
   static const cartItemsKey = 'cartItems';
+
   @override
   Future<Cart> fetchCart() async {
     final cartJson = await store.record(cartItemsKey).get(db) as String?;
@@ -39,13 +39,10 @@ class SembastCartRepository implements LocalCartRepository {
   @override
   Future<void> setCart(Cart cart) {
     return store.record(cartItemsKey).put(db, cart.toJson());
-    throw UnimplementedError();
   }
 
   @override
   Stream<Cart> watchCart() {
-    //This a method that gives us a snapshot every time the data changes
-    //We need to convert the snapshot's value from dynamic to Cart
     final record = store.record(cartItemsKey);
     return record.onSnapshot(db).map((snapshot) {
       if (snapshot != null) {

@@ -1,14 +1,13 @@
 import 'package:ecommerce_app/src/constants/breakpoints.dart';
 import 'package:ecommerce_app/src/features/authentication/data/fake_auth_repository.dart';
-import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
-import 'package:flutter/material.dart';
-import 'package:ecommerce_app/src/common_widgets/action_text_button.dart';
 import 'package:ecommerce_app/src/features/products/presentation/home_app_bar/more_menu_button.dart';
 import 'package:ecommerce_app/src/features/products/presentation/home_app_bar/shopping_cart_icon.dart';
+import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
+import 'package:ecommerce_app/src/routing/app_router.dart';
+import 'package:flutter/material.dart';
+import 'package:ecommerce_app/src/common_widgets/action_text_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../../routing/app_router.dart';
 
 /// Custom [AppBar] widget that is reused by the [ProductsListScreen] and
 /// [ProductScreen].
@@ -17,7 +16,7 @@ import '../../../../routing/app_router.dart';
 /// - Orders button
 /// - Account or Sign-in button
 class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
-  const HomeAppBar();
+  const HomeAppBar({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -45,9 +44,10 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
           const ShoppingCartIcon(),
           if (user != null) ...[
             ActionTextButton(
-                key: MoreMenuButton.ordersKey,
-                text: 'Orders'.hardcoded,
-                onPressed: () => context.pushNamed(AppRoute.orders.name)),
+              key: MoreMenuButton.ordersKey,
+              text: 'Orders'.hardcoded,
+              onPressed: () => context.pushNamed(AppRoute.orders.name),
+            ),
             ActionTextButton(
               key: MoreMenuButton.accountKey,
               text: 'Account'.hardcoded,
@@ -55,9 +55,10 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
             ),
           ] else
             ActionTextButton(
-                key: MoreMenuButton.signInKey,
-                text: 'Sign In'.hardcoded,
-                onPressed: () => context.pushNamed(AppRoute.signIn.name))
+              key: MoreMenuButton.signInKey,
+              text: 'Sign In'.hardcoded,
+              onPressed: () => context.pushNamed(AppRoute.signIn.name),
+            )
         ],
       );
     }

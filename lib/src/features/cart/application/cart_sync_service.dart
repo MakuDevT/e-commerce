@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:ecommerce_app/src/exceptions/error_logger.dart';
 import 'package:ecommerce_app/src/features/authentication/data/fake_auth_repository.dart';
 import 'package:ecommerce_app/src/features/authentication/domain/app_user.dart';
 import 'package:ecommerce_app/src/features/cart/data/local/local_cart_repository.dart';
@@ -8,15 +9,13 @@ import 'package:ecommerce_app/src/features/cart/domain/cart.dart';
 import 'package:ecommerce_app/src/features/cart/domain/item.dart';
 import 'package:ecommerce_app/src/features/cart/domain/mutable_cart.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CartSyncService {
-  final Ref ref;
-
   CartSyncService(this.ref) {
     _init();
   }
+  final Ref ref;
 
   void _init() {
     ref.listen<AsyncValue<AppUser?>>(authStateChangesProvider,
@@ -25,10 +24,12 @@ class CartSyncService {
       final user = next.value;
       if (previousUser == null && user != null) {
         _moveItemsToRemoteCart(user.uid);
-      } else {}
+      }
     });
   }
 
+  /// moves all items from the local to the remote cart taking into account the
+  /// available quantities
   Future<void> _moveItemsToRemoteCart(String uid) async {
     try {
       // Get the local cart data
@@ -42,13 +43,13 @@ class CartSyncService {
             await _getLocalItemsToAdd(localCart, remoteCart);
         // Add all the local items to the remote cart
         final updatedRemoteCart = remoteCart.addItems(localItemsToAdd);
-        // Write the updated remote cart data tot he repository
+        // Write the updated remote cart data to the repository
         await remoteCartRepository.setCart(uid, updatedRemoteCart);
         // Remove all items from the local cart
         await localCartRepository.setCart(const Cart());
       }
-    } catch (e) {
-      //handle error
+    } catch (e, st) {
+      ref.read(errorLoggerProvider).logError(e, st);
     }
   }
 
@@ -62,13 +63,15 @@ class CartSyncService {
     for (final localItem in localCart.items.entries) {
       final productId = localItem.key;
       final localQuantity = localItem.value;
-      // Get the quantity for the corresponding item in the remote cart
+      // get the quantity for the corresponding item in the remote cart
       final remoteQuantity = remoteCart.items[productId] ?? 0;
-      final product = products.firstWhere((element) => element.id == productId);
+      final product = products.firstWhere((product) => product.id == productId);
       // Cap the quantity of each item to the available quantity
-      final cappedLocalQuantity =
-          min(localQuantity, product.availableQuantity - remoteQuantity);
-      // if the capped quantity is >0, add to the list of items to add
+      final cappedLocalQuantity = min(
+        localQuantity,
+        product.availableQuantity - remoteQuantity,
+      );
+      // if the capped quantity is > 0, add to the list of items to add
       if (cappedLocalQuantity > 0) {
         localItemsToAdd
             .add(Item(productId: productId, quantity: cappedLocalQuantity));

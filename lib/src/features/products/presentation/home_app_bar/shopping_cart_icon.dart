@@ -21,8 +21,7 @@ class ShoppingCartIcon extends ConsumerWidget {
           child: IconButton(
             key: shoppingCartIconKey,
             icon: const Icon(Icons.shopping_cart),
-            //You can use  GoRouter.of(context).go('/cart'))
-            onPressed: (() => context.pushNamed(AppRoute.cart.name)),
+            onPressed: () => context.pushNamed(AppRoute.cart.name),
           ),
         ),
         if (cartItemsCount > 0)

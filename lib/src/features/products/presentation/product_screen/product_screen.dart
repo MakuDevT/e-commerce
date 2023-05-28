@@ -19,7 +19,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// Shows the product page for a given product ID.
 class ProductScreen extends StatelessWidget {
   const ProductScreen({super.key, required this.productId});
-  final String productId;
+  final ProductID productId;
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +75,8 @@ class ProductDetails extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(product.title, style: Theme.of(context).textTheme.headline6),
+              Text(product.title,
+                  style: Theme.of(context).textTheme.titleLarge),
               gapH8,
               Text(product.description),
               // Only show average if there is at least one rating
@@ -87,7 +88,7 @@ class ProductDetails extends ConsumerWidget {
               const Divider(),
               gapH8,
               Text(priceFormatted,
-                  style: Theme.of(context).textTheme.headline5),
+                  style: Theme.of(context).textTheme.headlineSmall),
               gapH8,
               LeaveReviewAction(productId: product.id),
               const Divider(),
